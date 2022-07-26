@@ -1,3 +1,6 @@
 # This is a comment
 /v4/upload
   Cache-Control: max-age=31536000
+
+/v5/upload
+  Cache-Control: max-age=31536000
