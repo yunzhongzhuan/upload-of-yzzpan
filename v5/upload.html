@@ -114,11 +114,16 @@ function FileUploadStart(fb,so){
 	            // 如果是最后一发
 	            if((sendOK+1) == sendTimes){
 	            	// xhr.setRequestHeader("HASH", so.hash  ) ;
-                so.token = so.token + so.hash;
-					xhr.setRequestHeader("SID", userinfo["session_id"]);
-					xhr.setRequestHeader("FileSize",  encodeURIComponent (fb.size) );
-					xhr.setRequestHeader("FileName", encodeURIComponent (fb.name) );
-					xhr.setRequestHeader("folderOf", so.parent_folder_id);
+			if(so.token == undefined){
+				so.token = so.hash;
+			}else{
+				so.token = so.token + so.hash;
+			}
+			
+			xhr.setRequestHeader("SID", userinfo["session_id"]);
+			xhr.setRequestHeader("FileSize",  encodeURIComponent (fb.size) );
+			xhr.setRequestHeader("FileName", encodeURIComponent (fb.name) );
+			xhr.setRequestHeader("folderOf", so.parent_folder_id);
 
 	            	//xhr.setRequestHeader("Content-Range", "bytes " + (""+(sendOK*LENGTH)) +"-"+ fb.size + "/" +  fb.size  ) ;
 	            	xhr.setRequestHeader("Content-Range",  (""+(sendOK*LENGTH)) +"-"+ fb.size   ) ;
