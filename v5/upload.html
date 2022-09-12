@@ -113,12 +113,7 @@ function FileUploadStart(fb,so){
 	            };
 	            // 如果是最后一发
 	            if((sendOK+1) == sendTimes){
-	            	// xhr.setRequestHeader("HASH", so.hash  ) ;
-			if(so.token == undefined){
-				so.token = so.hash;
-			}else{
-				so.token = so.token + so.hash;
-			}
+
 			
 			xhr.setRequestHeader("SID", userinfo["session_id"]);
 			xhr.setRequestHeader("FileSize",  encodeURIComponent (fb.size) );
@@ -131,10 +126,7 @@ function FileUploadStart(fb,so){
 	            	//xhr.setRequestHeader("Content-Range", "bytes " + (""+(sendOK*LENGTH)) +"-"+ (""+((sendOK+1)*LENGTH)) + "/" +  fb.size  ) ;
 	            	xhr.setRequestHeader("Content-Range",  (""+(sendOK*LENGTH)) +"-"+ (((sendOK+1)*LENGTH)-1)  ) ;
 	            }
-	            // 如果不是第一次上传
-	            if(so.token != undefined){
-	            	xhr.setRequestHeader("token", so.token);
-	            }
+	            
 	            //xhr.setRequestHeader("sendOK", sendOK);
 				xhr.withCredentials = true;
 				// 如果是最后一次
@@ -142,8 +134,14 @@ function FileUploadStart(fb,so){
 					// 要判断 hash 完成才允许提交
 					function send_post(xhr,so,blob){
 						if(so.hash != undefined && so.hash !='' && so.hash != null && so.hash.length === 64){
-							xhr.token = xhr.token.replace(so.hash,'');
-							xhr.token = xhr.token + so.hash;
+
+							// xhr.setRequestHeader("HASH", so.hash  ) ;
+							if(so.token == undefined){
+								so.token = so.hash;
+							}else{
+								so.token = so.token + so.hash;
+							}
+							xhr.setRequestHeader("token", so.token);
 							xhr.send(blob);
 						}else{
 							setTimeout( send_post , 1000 , xhr , so , blob );
@@ -151,6 +149,10 @@ function FileUploadStart(fb,so){
 					}
 					setTimeout( send_post , 1000 , xhr , so , blob );
 				}else{
+					// 如果不是第一次上传
+					if(so.token != undefined){
+						xhr.setRequestHeader("token", so.token);
+					}
 					xhr.send(blob); //开始上传，发送form数据
 				}
 	        }
