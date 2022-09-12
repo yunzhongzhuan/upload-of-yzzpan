@@ -4,3 +4,7 @@
 
 /v5/upload
   Cache-Control: max-age=31536000
+
+
+/v6/upload
+  Cache-Control: max-age=31536000
